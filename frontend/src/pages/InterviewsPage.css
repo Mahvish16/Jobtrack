@@ -1,0 +1,144 @@
+/* ========================================
+   INTERVIEWS PAGE (/interviews)
+======================================== */
+
+.interviews-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.interviews-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-2);
+}
+
+.interviews-date {
+    width: 62px;
+    flex-shrink: 0;
+    padding: 9px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    border-radius: 10px;
+    background: var(--brand-soft);
+    color: var(--brand-text);
+}
+
+.interviews-date strong {
+    font-size: 20px;
+    line-height: 1.1;
+}
+
+.interviews-date span {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.interviews-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.interviews-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.interviews-title h3 {
+    color: var(--text-strong);
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+
+.interviews-role {
+    color: var(--text);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.interviews-role strong {
+    color: var(--text-strong);
+}
+
+.interviews-meta {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin-top: 9px;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.interviews-meta li,
+.interviews-join {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.interviews-notes {
+    margin-top: 10px;
+    padding: 9px 11px;
+    border-radius: 8px;
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.interviews-warning {
+    margin-top: 10px;
+    color: var(--warn-text);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.interviews-actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.interviews-join {
+    padding: 7px 11px;
+    border-radius: 6px;
+    background: var(--brand);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.interviews-join:hover {
+    background: var(--brand-hover);
+}
+
+@media (max-width: 700px) {
+    .interviews-card {
+        flex-wrap: wrap;
+    }
+
+    .interviews-body {
+        flex-basis: calc(100% - 80px);
+    }
+
+    .interviews-actions {
+        width: 100%;
+    }
+}

@@ -1,0 +1,181 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+/* Global rules only. Page styles live next to their page component and use
+   a prefix (auth-, preview-, dashboard-, applications-, ...) so that one
+   page can never restyle another. */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: "Inter", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------------------------------------------------------------
+   THEME
+   Every colour in the logged-in app is one of these variables.
+   Dark mode only changes the VALUES; no component CSS is duplicated.
+   The theme is chosen by data-theme on <html> (see theme.js).
+--------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  /* Page and surfaces (cards, sidebar, dialogs) */
+  --bg: #f5f5fa;
+  --bg-image: radial-gradient(ellipse 55% 420px at 100% 0%, rgba(139, 92, 246, 0.09), transparent 70%);
+  --surface: #ffffff;
+  --surface-2: #f8f8fc;
+  --surface-3: #f0f0f6;
+  --topbar-bg: rgba(255, 255, 255, 0.82);
+
+  /* Lines */
+  --border: #e8e8f1;
+  --border-strong: #dcdbe8;
+
+  /* Text, from strongest to faintest */
+  --text-strong: #1f1d33;
+  --text: #595b70;
+  --text-muted: #8a8ca0;
+  --text-faint: #b9bac6;
+
+  /* Brand purple */
+  --brand: #7c3aed;
+  --brand-hover: #6d28d9;
+  --brand-text: #6d32dc;
+  --brand-soft: #f1eaff;
+  --brand-soft-hover: #e5d9ff;
+  --brand-border: #d9c9fb;
+  --focus-ring: rgba(124, 58, 237, 0.16);
+
+  /* Form fields */
+  --field-bg: #f5f5fa;
+  --field-border: #d9d8e6;
+
+  /* Meaning colours: a text colour and a soft background each */
+  --danger: #d9465a;
+  --danger-text: #cb3d51;
+  --danger-soft: #fff0f2;
+  --danger-border: #ffd0d6;
+  --info-text: #2f6bd0;
+  --info-soft: #eaf2ff;
+  --warn-text: #a8650f;
+  --warn-soft: #fff3e0;
+  --success-text: #1b855a;
+  --success-soft: #e4f7ee;
+
+  /* Status colours for the analytics ring. Checked with a colour-vision
+     simulator in the order applied, interview, selected, interested,
+     rejected: neighbours stay distinguishable for colour-blind users. */
+  --chart-applied: #2a78d6;
+  --chart-interview: #eb6834;
+  --chart-selected: #1baf7a;
+  --chart-interested: #6250d6;
+  --chart-rejected: #e34948;
+
+  /* Dark elements on a light page: toast, chart tooltip */
+  --inverse-bg: #25243a;
+
+  --shadow-card: 0 1px 2px rgba(20, 16, 40, 0.04), 0 8px 24px rgba(20, 16, 40, 0.05);
+  --shadow-pop: 0 18px 46px rgba(20, 16, 40, 0.16);
+}
+
+:root[data-theme="dark"] {
+  /* Tells the browser to draw its own parts (date pickers, select menus,
+     scrollbars) dark as well. */
+  color-scheme: dark;
+
+  --bg: #0e0c18;
+  --bg-image: radial-gradient(ellipse 55% 420px at 100% 0%, rgba(139, 92, 246, 0.16), transparent 70%);
+  --surface: #171425;
+  --surface-2: #1c192c;
+  --surface-3: #252137;
+  --topbar-bg: rgba(23, 20, 37, 0.8);
+
+  --border: #2a263d;
+  --border-strong: #3a3552;
+
+  --text-strong: #f4f2fb;
+  --text: #c6c2d8;
+  --text-muted: #9590ab;
+  --text-faint: #5b5673;
+
+  --brand: #8b5cf6;
+  --brand-hover: #a07bff;
+  --brand-text: #c4b0ff;
+  --brand-soft: #2a2148;
+  --brand-soft-hover: #352a5c;
+  --brand-border: #4a3b80;
+  --focus-ring: rgba(139, 92, 246, 0.28);
+
+  --field-bg: #110f1d;
+  --field-border: #3a3552;
+
+  --danger: #e5566a;
+  --danger-text: #ff8f9c;
+  --danger-soft: #3a1a23;
+  --danger-border: #6b2a37;
+  --info-text: #8cb6ff;
+  --info-soft: #17263f;
+  --warn-text: #f5b961;
+  --warn-soft: #3a2a12;
+  --success-text: #62d9a3;
+  --success-soft: #123226;
+
+  --chart-applied: #3987e5;
+  --chart-interview: #d95926;
+  --chart-selected: #199e70;
+  --chart-interested: #9085e9;
+  --chart-rejected: #e66767;
+
+  --inverse-bg: #322d4c;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px rgba(0, 0, 0, 0.28);
+  --shadow-pop: 0 20px 50px rgba(0, 0, 0, 0.55);
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  min-width: 320px;
+  overflow-x: hidden;
+  background: var(--bg);
+}
+
+/* The login page is dark, so the area behind it should be dark as well. */
+body:has(.auth-page) {
+  background: #0d0921;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+select,
+textarea {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* SVG icons (components/Icon.jsx) sit on the text line like a letter. */
+.icon {
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: -0.15em;
+}

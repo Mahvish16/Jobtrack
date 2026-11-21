@@ -1,0 +1,20 @@
+# Backend dependencies. Install with:  pip install -r requirements.txt
+Django==6.1.3
+djangorestframework==3.18.3
+djangorestframework_simplejwt==5.5.1
+django-cors-headers==4.9.0
+psycopg[binary]==3.3.9
+python-dotenv==1.2.4
+
+# Gmail integration
+google-auth==2.62.2
+google-auth-oauthlib==1.5.0
+google-api-python-client==2.202.0
+requests==2.34.2
+
+# Encryption of stored Gmail tokens
+cryptography==50.0.2
+
+# Production: static files for the admin, and the WSGI server
+whitenoise==6.12.0
+gunicorn==27.0.1

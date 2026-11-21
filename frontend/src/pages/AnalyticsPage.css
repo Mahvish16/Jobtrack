@@ -1,0 +1,802 @@
+/* ========================================
+   ANALYTICS PAGE (/analytics)
+   Charts use one colour: the bars show "how many", so length carries the
+   meaning and every bar has its number written next to it.
+======================================== */
+
+.analytics-tiles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.analytics-tile {
+    min-width: 0;
+    padding: 15px 17px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.analytics-tile:hover {
+    transform: translateY(-2px);
+    border-color: var(--brand-border);
+}
+
+.analytics-tile-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.analytics-tile-top p {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.analytics-tile-icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: var(--brand-soft);
+    color: var(--brand-text);
+}
+
+.analytics-tile strong {
+    display: block;
+    margin: 4px 0 5px;
+    color: var(--text-strong);
+    font-size: 26px;
+    line-height: 1.1;
+}
+
+.analytics-tile-note {
+    display: block;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.analytics-trend {
+    margin-right: 5px;
+    font-size: 9px;
+}
+
+.analytics-trend.up {
+    color: var(--success-text);
+}
+
+.analytics-trend.down {
+    color: var(--danger-text);
+}
+
+.analytics-section {
+    min-width: 0;
+    margin-bottom: 24px;
+    padding: 23px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+}
+
+.analytics-section > h2 {
+    color: var(--text-strong);
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.analytics-section > p {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.analytics-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 24px;
+}
+
+.analytics-empty {
+    margin-top: 20px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* Tabs */
+
+.analytics-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.analytics-tabs button {
+    padding: 9px 16px;
+    /* The coloured line under the selected tab sits on the grey line. */
+    margin-bottom: -1px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.analytics-tabs button:hover {
+    color: var(--text-strong);
+}
+
+.analytics-tabs button.active {
+    border-bottom-color: var(--brand);
+    color: var(--brand-text);
+}
+
+.analytics-columns.three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Status ring */
+
+.analytics-donut {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 18px;
+}
+
+.analytics-donut-chart {
+    position: relative;
+    width: 150px;
+    flex-shrink: 0;
+}
+
+.analytics-donut-chart svg {
+    display: block;
+    width: 100%;
+}
+
+.analytics-slice {
+    transition: opacity 0.2s, stroke-width 0.2s;
+}
+
+.analytics-slice:hover {
+    stroke-width: 18;
+}
+
+.analytics-slice.dim {
+    opacity: 0.35;
+}
+
+/* One colour per status, used by the ring and by the legend dots. */
+.analytics-slice.applied { stroke: var(--chart-applied); }
+.analytics-slice.interview { stroke: var(--chart-interview); }
+.analytics-slice.selected { stroke: var(--chart-selected); }
+.analytics-slice.interested { stroke: var(--chart-interested); }
+.analytics-slice.rejected { stroke: var(--chart-rejected); }
+
+.analytics-dot.applied { background: var(--chart-applied); }
+.analytics-dot.interview { background: var(--chart-interview); }
+.analytics-dot.selected { background: var(--chart-selected); }
+.analytics-dot.interested { background: var(--chart-interested); }
+.analytics-dot.rejected { background: var(--chart-rejected); }
+
+.analytics-donut-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.analytics-donut-center strong {
+    color: var(--text-strong);
+    font-size: 26px;
+    line-height: 1.1;
+}
+
+.analytics-donut-center span {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.analytics-legend {
+    flex: 1;
+    min-width: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.analytics-legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 7px;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 13px;
+}
+
+.analytics-legend li.active {
+    background: var(--surface-3);
+}
+
+.analytics-dot {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+    border-radius: 3px;
+}
+
+.analytics-legend span {
+    flex: 1;
+}
+
+.analytics-legend strong {
+    color: var(--text-strong);
+}
+
+.analytics-legend small {
+    width: 30px;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-align: right;
+}
+
+/* Funnel */
+
+.analytics-funnel {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 22px;
+}
+
+.analytics-funnel-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 7px;
+    color: var(--text);
+    font-size: 12px;
+}
+
+.analytics-funnel-label strong {
+    color: var(--text-strong);
+}
+
+.analytics-funnel-label small {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* The bar is centred, so the steps form a funnel shape. */
+.analytics-funnel-track {
+    display: flex;
+    justify-content: center;
+}
+
+.analytics-funnel-bar {
+    height: 30px;
+    border-radius: 6px;
+    background: var(--brand);
+    transition: width 0.4s ease;
+}
+
+/* One colour getting lighter: the same thing, fewer of them. */
+.analytics-funnel-bar.step-1 { opacity: 0.8; }
+.analytics-funnel-bar.step-2 { opacity: 0.6; }
+.analytics-funnel-bar.step-3 { opacity: 0.45; }
+
+/* Interview outcomes: one row per result */
+
+.analytics-outcomes {
+    list-style: none;
+    margin-top: 16px;
+}
+
+.analytics-outcomes li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-size: 13px;
+}
+
+.analytics-outcomes li:last-child {
+    border-bottom: 0;
+}
+
+.analytics-outcomes strong {
+    min-width: 30px;
+    padding: 3px 9px;
+    border-radius: 8px;
+    background: var(--surface-3);
+    color: var(--text-strong);
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Numbered lists */
+
+.analytics-rank {
+    list-style: none;
+    margin-top: 16px;
+}
+
+.analytics-rank li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+
+.analytics-rank li:last-child {
+    border-bottom: 0;
+}
+
+.analytics-rank-number {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 7px;
+    background: var(--brand-soft);
+    color: var(--brand-text);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.analytics-rank-label {
+    flex: 1;
+    min-width: 0;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.analytics-rank strong {
+    color: var(--text-strong);
+}
+
+/* Monthly column chart */
+
+.analytics-chart {
+    /* The bars are as tall as the window allows, within sensible limits. */
+    --chart-height: clamp(110px, calc(100vh - 570px), 220px);
+
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.analytics-chart-axis {
+    height: var(--chart-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: var(--text-muted);
+    font-size: 10px;
+    text-align: right;
+}
+
+.analytics-chart-axis span {
+    line-height: 1;
+    transform: translateY(-50%);
+}
+
+.analytics-chart-axis span:last-child {
+    transform: translateY(50%);
+}
+
+.analytics-chart-plot {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: 2px;
+}
+
+.analytics-chart-grid {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: var(--chart-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.analytics-chart-grid i {
+    height: 1px;
+    background: var(--border);
+}
+
+.analytics-chart-grid i:last-child {
+    background: var(--border-strong);
+}
+
+/* The whole column is the hover target, not just the thin bar. */
+.analytics-chart-column {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    outline: none;
+}
+
+.analytics-chart-bar-area {
+    width: 100%;
+    height: var(--chart-height);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    border-radius: 6px 6px 0 0;
+}
+
+.analytics-chart-column.active .analytics-chart-bar-area {
+    background: rgba(119, 57, 232, 0.06);
+}
+
+.analytics-chart-column:focus-visible .analytics-chart-bar-area {
+    box-shadow: inset 0 0 0 2px var(--brand);
+}
+
+.analytics-chart-bar {
+    width: min(60%, 34px);
+    min-height: 3px;
+    border-radius: 4px 4px 0 0;
+    background: var(--brand);
+}
+
+.analytics-chart-column.active .analytics-chart-bar {
+    background: var(--brand-hover);
+}
+
+.analytics-chart-label {
+    margin-top: 8px;
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+.analytics-tooltip {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    z-index: 3;
+    transform: translateX(-50%);
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: var(--inverse-bg);
+    color: #fff;
+    font-size: 11px;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 6px 18px rgba(25, 20, 45, 0.2);
+}
+
+.analytics-tooltip span {
+    display: block;
+    margin-top: 2px;
+    color: #c9c7d6;
+    font-size: 10px;
+}
+
+/* Period switch (30 days / 90 days / 1 year / All time) */
+
+.analytics-range {
+    flex-shrink: 0;
+    display: flex;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+
+.analytics-range button {
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+}
+
+.analytics-range button:hover {
+    color: var(--text-strong);
+}
+
+.analytics-range button.active {
+    background: var(--brand);
+    color: #fff;
+}
+
+/* Daily activity grid.
+   One colour, five steps from empty to full: darker simply means more. */
+
+.analytics-grid-wrapper {
+    display: flex;
+    gap: 8px;
+    margin-top: 22px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.analytics-grid-weekdays {
+    display: grid;
+    grid-template-rows: repeat(7, 22px);
+    gap: 5px;
+    margin-top: 21px;
+    color: var(--text-muted);
+    font-size: 9px;
+    line-height: 22px;
+}
+
+.analytics-grid {
+    display: flex;
+    gap: 5px;
+}
+
+.analytics-grid-week {
+    display: grid;
+    grid-template-rows: 16px repeat(7, 22px);
+    gap: 5px;
+}
+
+.analytics-grid-month {
+    width: 22px;
+    color: var(--text-muted);
+    font-size: 9px;
+    line-height: 16px;
+    white-space: nowrap;
+}
+
+.analytics-grid-week i,
+.analytics-grid-legend i {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: var(--surface-3);
+}
+
+/* color-mix blends the brand colour into the empty-square colour. */
+.analytics-grid-week i.level-1,
+.analytics-grid-legend i.level-1 {
+    background: color-mix(in srgb, var(--brand) 30%, var(--surface-3));
+}
+
+.analytics-grid-week i.level-2,
+.analytics-grid-legend i.level-2 {
+    background: color-mix(in srgb, var(--brand) 55%, var(--surface-3));
+}
+
+.analytics-grid-week i.level-3,
+.analytics-grid-legend i.level-3 {
+    background: color-mix(in srgb, var(--brand) 78%, var(--surface-3));
+}
+
+.analytics-grid-week i.level-4,
+.analytics-grid-legend i.level-4 {
+    background: var(--brand);
+}
+
+.analytics-grid-week i.active {
+    outline: 2px solid var(--text-strong);
+    outline-offset: 1px;
+}
+
+.analytics-grid-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.analytics-grid-footer p {
+    color: var(--text);
+}
+
+.analytics-grid-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Table alternative */
+
+.analytics-table {
+    margin-top: 16px;
+    color: var(--text);
+    font-size: 12px;
+}
+
+.analytics-table summary {
+    width: fit-content;
+    color: var(--brand-text);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.analytics-table table {
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+.analytics-table th,
+.analytics-table td {
+    padding: 6px 24px 6px 0;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.analytics-table th {
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+@media (max-width: 1050px) {
+    .analytics-tiles {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .analytics-columns.three {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .analytics-range {
+        width: 100%;
+    }
+
+    .analytics-range button {
+        flex: 1;
+        padding: 8px 4px;
+    }
+
+    .analytics-tiles {
+        gap: 10px;
+    }
+
+    .analytics-tile {
+        padding: 14px;
+    }
+
+    .analytics-tile strong {
+        font-size: 22px;
+    }
+
+    .analytics-section {
+        padding: 16px;
+    }
+
+    .analytics-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .analytics-tabs button {
+        flex: 1;
+        padding: 11px 6px;
+    }
+
+    .analytics-donut {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .analytics-donut-chart {
+        width: 170px;
+        margin: 0 auto;
+    }
+
+
+
+    /* 12 labels do not fit: show every second month. */
+    .analytics-chart-column:nth-child(odd) .analytics-chart-label {
+        visibility: hidden;
+    }
+}
+
+/* Short windows: smaller squares so the activity grid fits beside the
+   bar chart without scrolling. */
+@media (max-height: 820px) and (min-width: 701px) {
+    .analytics-section {
+        padding-top: 18px;
+        padding-bottom: 18px;
+    }
+
+    .analytics-grid-wrapper {
+        margin-top: 14px;
+    }
+
+    .analytics-grid-weekdays {
+        grid-template-rows: repeat(7, 17px);
+        gap: 4px;
+        margin-top: 20px;
+        line-height: 17px;
+    }
+
+    .analytics-grid,
+    .analytics-grid-week {
+        gap: 4px;
+    }
+
+    .analytics-grid-week {
+        grid-template-rows: 16px repeat(7, 17px);
+    }
+
+    .analytics-grid-week i,
+    .analytics-grid-legend i {
+        width: 17px;
+        height: 17px;
+        border-radius: 4px;
+    }
+
+    .analytics-grid-month {
+        width: 17px;
+    }
+
+    .analytics-grid-footer {
+        margin-top: 10px;
+    }
+
+    .analytics-table {
+        margin-top: 10px;
+    }
+
+    .analytics-funnel {
+        gap: 9px;
+        margin-top: 16px;
+    }
+
+    .analytics-funnel-bar {
+        height: 20px;
+    }
+
+    .analytics-rank li,
+    .analytics-outcomes li {
+        padding: 7px 0;
+    }
+}
+
+/* Medium widths: three narrow columns would squeeze the ring. */
+@media (max-width: 1280px) and (min-width: 1051px) {
+    .analytics-donut {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .analytics-donut-chart {
+        width: 130px;
+        margin: 0 auto;
+    }
+}

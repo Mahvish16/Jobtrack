@@ -1,0 +1,470 @@
+/* ========================================
+   CALENDAR PAGE (/calendar)
+======================================== */
+
+/* Calendar on the left, a side panel on the right. */
+
+.calendar-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    align-items: start;
+    gap: 24px;
+}
+
+.calendar-main {
+    margin-bottom: 0;
+}
+
+/* Stays in view while the page scrolls. It is never taller than the
+   window: a long "Coming up" list scrolls inside the panel instead of
+   making the whole page longer. */
+.calendar-side {
+    position: sticky;
+    top: 86px;
+    min-width: 0;
+    /* Window height minus everything above the panel and the space below. */
+    max-height: calc(100vh - 252px);
+    overflow-y: auto;
+    /* A slim scroll bar that matches the theme. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+    /* Room for the cards' shadows, which would otherwise be cut off. */
+    margin: -6px;
+    padding: 6px;
+}
+
+.calendar-side .applications-section:last-child {
+    margin-bottom: 0;
+}
+
+.calendar-side .applications-section {
+    padding: 20px;
+    margin-bottom: 18px;
+}
+
+.calendar-side-label {
+    color: var(--brand-text);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.calendar-side-date {
+    margin: 5px 0 14px;
+    color: var(--text-strong);
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+.calendar-side-heading {
+    margin-bottom: 14px;
+    color: var(--text-strong);
+    font-size: 15px;
+}
+
+.calendar-side-empty {
+    padding: 14px 0 4px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.calendar-side-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.calendar-side-actions .edit-action {
+    flex: 1;
+    margin-right: 0;
+    padding: 9px 10px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.calendar-side-actions .edit-action:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.calendar-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+    margin-bottom: 14px;
+}
+
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.calendar-nav h2 {
+    margin-left: 10px;
+    color: var(--text-strong);
+    font-size: 17px;
+}
+
+.calendar-nav button,
+.calendar-views button {
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.calendar-nav button {
+    border-radius: 8px;
+}
+
+.calendar-nav button:hover,
+.calendar-views button:hover {
+    border-color: var(--brand-border);
+    color: var(--brand-text);
+}
+
+.calendar-views {
+    display: flex;
+}
+
+.calendar-views button:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.calendar-views button:last-child {
+    margin-left: -1px;
+    border-radius: 0 8px 8px 0;
+}
+
+.calendar-views button.active {
+    position: relative;
+    border-color: var(--brand);
+    background: var(--brand);
+    color: #fff;
+}
+
+/* Legend (also a filter) */
+
+.calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    /* Sits between the month name and the Month / Week switch. */
+    margin: 0 auto 0 8px;
+}
+
+.calendar-legend .event-chip {
+    padding: 5px 9px;
+    font-size: 11px;
+}
+
+.calendar-legend .event-chip b {
+    min-width: 18px;
+    padding: 1px 5px;
+    border-radius: 9px;
+    background: var(--surface);
+    font-size: 10px;
+    text-align: center;
+}
+
+.calendar-legend .event-chip.off {
+    background: var(--surface-3);
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+/* Grid: 7 equal columns. The 1px gap over a grey background draws the lines. */
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--border);
+}
+
+.calendar-weekday {
+    padding: 9px 6px;
+    background: var(--surface-2);
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.calendar-day {
+    min-width: 0;
+    /* Month view: the height left under the headers, shared by the weeks
+       on screen, but never so small or so large that it looks wrong. */
+    min-height: clamp(52px, calc((100vh - 384px) / var(--calendar-rows, 6)), 104px);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    padding: 7px;
+    border: 0;
+    background: var(--surface);
+    text-align: left;
+}
+
+.calendar-grid.week .calendar-day {
+    min-height: clamp(200px, calc(100vh - 404px), 420px);
+}
+
+.calendar-day.weekend {
+    background: var(--surface-2);
+}
+
+.calendar-day:hover {
+    background: var(--surface-2);
+}
+
+.calendar-day.outside {
+    background: var(--surface-2);
+}
+
+.calendar-day.outside .calendar-day-number {
+    color: var(--text-faint);
+}
+
+.calendar-day.selected {
+    box-shadow: inset 0 0 0 2px var(--brand);
+}
+
+.calendar-day-number {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.calendar-day.today .calendar-day-number {
+    background: var(--brand);
+    color: #fff;
+}
+
+.calendar-day-events {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    min-width: 0;
+}
+
+.calendar-day-events .event-chip {
+    display: block;
+    width: 100%;
+    padding: 3px 6px;
+}
+
+.calendar-day-events .event-chip .icon {
+    margin-right: 4px;
+}
+
+.calendar-more {
+    padding-left: 2px;
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.calendar-day-dots {
+    display: none;
+    gap: 3px;
+}
+
+.calendar-day-dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand);
+}
+
+.calendar-day-dots i.interview {
+    background: var(--warn-text);
+}
+
+.calendar-day-dots i.followup {
+    background: var(--info-text);
+}
+
+.calendar-day-dots i.deadline {
+    background: var(--danger);
+}
+
+/* Selected day */
+
+.calendar-day-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.calendar-day-list button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-2);
+    text-align: left;
+}
+
+.calendar-day-list button:hover {
+    border-color: var(--brand-border);
+    background: var(--brand-soft);
+}
+
+.calendar-day-list .event-chip {
+    flex-shrink: 0;
+    min-width: 86px;
+    justify-content: center;
+}
+
+.calendar-day-list-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.calendar-day-list-text strong {
+    color: var(--text-strong);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.calendar-day-list-text span,
+.calendar-day-list-time {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.calendar-day-list-time {
+    flex-shrink: 0;
+}
+
+/* Entries in the side panel are stacked: kind + time, then the text. */
+.calendar-day-list button {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 11px 12px;
+}
+
+.calendar-day-list-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.calendar-day-list .event-chip {
+    min-width: 0;
+    padding: 4px 8px;
+}
+
+.calendar-day-list-time {
+    font-weight: 600;
+}
+
+.calendar-day-list-text span {
+    line-height: 1.45;
+}
+
+/* Narrower screens: the side panel moves under the calendar. */
+@media (max-width: 1180px) {
+    .calendar-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .calendar-side {
+        position: static;
+        max-height: none;
+        overflow: visible;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .calendar-side .applications-section {
+        margin-bottom: 0;
+    }
+}
+
+/* Phones: cells are too narrow for text, so show dots instead. */
+@media (max-width: 700px) {
+    .calendar-day,
+    .calendar-grid.week .calendar-day {
+        min-height: 56px;
+        align-items: center;
+        padding: 5px 2px;
+    }
+
+    .calendar-day-events {
+        display: none;
+    }
+
+    .calendar-day-dots {
+        display: flex;
+    }
+
+    .calendar-nav h2 {
+        font-size: 14px;
+    }
+
+    .calendar-side {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Short windows: give the grid every pixel it can get. */
+@media (max-height: 820px) and (min-width: 1181px) {
+    .calendar-side {
+        max-height: calc(100vh - 204px);
+    }
+}
+
+@media (max-height: 820px) and (min-width: 701px) {
+    .calendar-main {
+        padding-top: 18px;
+        padding-bottom: 18px;
+    }
+
+    .calendar-day {
+        gap: 3px;
+        padding: 5px 6px;
+    }
+
+    .calendar-day-number {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+    }
+
+    .calendar-weekday {
+        padding: 6px;
+    }
+}

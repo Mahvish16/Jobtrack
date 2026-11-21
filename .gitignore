@@ -1,0 +1,25 @@
+# Secrets: real passwords and keys. Never commit these.
+.env
+.env.*
+!.env.example
+
+# Python
+venv/
+__pycache__/
+*.py[cod]
+db.sqlite3
+
+# Build output
+staticfiles/
+node_modules/
+dist/
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log

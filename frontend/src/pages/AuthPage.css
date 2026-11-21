@@ -1,0 +1,847 @@
+/* ========================================
+   LOGIN / SIGN UP PAGE
+   auth-    -> the page and the form
+   preview- -> the decorative dashboard picture
+======================================== */
+
+.auth-page {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  /* The page may grow taller than the screen, so content is never cut off.
+     "hidden" here only trims the glow circles at the edges. */
+  overflow: hidden;
+  padding: 26px clamp(24px, 6vw, 96px);
+  color: #ffffff;
+  background:
+    radial-gradient(ellipse 70% 55% at 8% 0%, rgba(124, 58, 237, 0.38), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(168, 85, 247, 0.26), transparent 60%),
+    #0b0719;
+}
+
+/* A faint dot grid that fades out towards the edges. */
+.auth-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 40%, #000 30%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 40%, #000 30%, transparent 78%);
+  pointer-events: none;
+}
+
+.auth-glow {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(110px);
+  pointer-events: none;
+}
+
+.auth-glow-one {
+  width: 340px;
+  height: 340px;
+  top: -190px;
+  left: 14%;
+  background: rgba(139, 92, 246, 0.34);
+}
+
+.auth-glow-two {
+  width: 360px;
+  height: 360px;
+  bottom: -230px;
+  right: 8%;
+  background: rgba(192, 132, 252, 0.24);
+}
+
+/* Header */
+
+.auth-topbar {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+  z-index: 2;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  color: white;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+.auth-brand-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #c084fc, #7c3aed);
+  box-shadow:
+    0 8px 24px rgba(124, 58, 237, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.auth-brand-caption {
+  border-left: 1px solid rgba(220, 193, 255, 0.25);
+  padding-left: 18px;
+  color: #a99cc4;
+  font-size: 13px;
+}
+
+/* Main layout */
+
+.auth-layout {
+  width: 100%;
+  max-width: 1320px;
+  flex: 1;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(400px, 0.92fr);
+  align-items: center;
+  gap: clamp(36px, 6vw, 96px);
+  padding: 30px 0 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Introduction (desktop only) */
+
+.auth-intro {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.auth-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 13px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(192, 132, 252, 0.35);
+  border-radius: 30px;
+  background: rgba(192, 132, 252, 0.1);
+  color: #dcc8ff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.auth-intro h1 {
+  font-size: clamp(42px, 4.6vw, 64px);
+  line-height: 1.06;
+  letter-spacing: -2.4px;
+  font-weight: 800;
+}
+
+.auth-intro h1 span {
+  display: inline-block;
+  /* Italic letters lean outside their box; the padding gives the gradient
+     room so the last letter is not cut off. */
+  padding: 0 0.12em 0.08em 0;
+  font-style: italic;
+  background: linear-gradient(90deg, #a78bfa, #e879f9);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.auth-lead {
+  max-width: 460px;
+  margin-top: 14px;
+  color: #b9add2;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.auth-features {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.auth-features li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #d9cff0;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.auth-features .icon {
+  color: #c084fc;
+}
+
+/* Floating preview cards (decorative) */
+
+.preview-stage {
+  position: relative;
+  width: 520px;
+  max-width: 100%;
+  height: 268px;
+  margin-top: 34px;
+}
+
+/* Frosted glass: a see-through fill, a thin light border and a blur of
+   whatever is behind the card. */
+.preview-card {
+  position: absolute;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 16px;
+  background: linear-gradient(160deg,
+      rgba(255, 255, 255, 0.11),
+      rgba(255, 255, 255, 0.04));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  /* Each card drifts up and down a few pixels, forever. */
+  animation: preview-float 7s ease-in-out infinite;
+}
+
+/* "translate" and "rotate" are separate properties, so the animation can
+   move a card without undoing its tilt. */
+@keyframes preview-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -9px;
+  }
+}
+
+.preview-card small {
+  display: block;
+  color: #a99cc4;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.preview-card strong {
+  display: block;
+  color: white;
+  font-size: 14px;
+}
+
+.preview-card span {
+  color: #b9add2;
+  font-size: 12px;
+}
+
+.preview-icon {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.22);
+  color: #d8b4fe !important;
+}
+
+.preview-icon.warm {
+  background: rgba(251, 191, 36, 0.16);
+  color: #fcd34d !important;
+}
+
+.preview-icon.good {
+  background: rgba(52, 211, 153, 0.16);
+  color: #6ee7b7 !important;
+}
+
+/* Interview reminder */
+
+.preview-card-interview {
+  top: 14px;
+  left: 0;
+  width: 286px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  rotate: -3deg;
+}
+
+.preview-card-interview div {
+  flex: 1;
+  min-width: 0;
+}
+
+.preview-card-interview strong {
+  margin: 2px 0;
+}
+
+.preview-card-interview em {
+  flex-shrink: 0;
+  padding: 4px 9px;
+  border-radius: 20px;
+  background: rgba(251, 191, 36, 0.16);
+  color: #fcd34d;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* Big number */
+
+.preview-card-stat {
+  top: 0;
+  left: 322px;
+  width: 158px;
+  rotate: 4deg;
+  animation-duration: 8s;
+  animation-delay: -2s;
+}
+
+.preview-card-stat strong {
+  margin: 10px 0 2px;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+/* Bar chart */
+
+.preview-card-chart {
+  top: 118px;
+  left: 44px;
+  width: 262px;
+  rotate: 2deg;
+  animation-duration: 9s;
+  animation-delay: -4s;
+}
+
+.preview-bars {
+  height: 74px;
+  margin-top: 12px;
+  display: flex;
+  align-items: flex-end;
+  gap: 9px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.preview-bars span {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(#c084fc, #7c3aed);
+}
+
+/* Offer */
+
+.preview-card-status {
+  top: 168px;
+  left: 286px;
+  z-index: 1;
+  width: 234px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  rotate: -2deg;
+  animation-duration: 6.5s;
+  animation-delay: -1s;
+}
+
+.preview-card-status strong {
+  margin-bottom: 2px;
+}
+
+/* People who ask their computer for less motion get still cards. */
+@media (prefers-reduced-motion: reduce) {
+  .preview-card {
+    animation: none;
+  }
+}
+
+/* Authentication card */
+
+.auth-card {
+  width: 100%;
+  max-width: 470px;
+  justify-self: end;
+  padding: clamp(26px, 3vw, 38px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 26px;
+  background: linear-gradient(160deg,
+      rgba(255, 255, 255, 0.09),
+      rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(192, 132, 252, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  position: relative;
+  z-index: 3;
+}
+
+.auth-mobile-brand {
+  display: none;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.28);
+  margin-bottom: 26px;
+}
+
+.auth-tabs button {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px;
+  background: transparent;
+  color: #b9add2;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.auth-tabs button:hover {
+  color: white;
+}
+
+.auth-tabs button.active {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  color: white;
+  box-shadow:
+    0 6px 18px rgba(124, 58, 237, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.auth-heading {
+  margin-bottom: 24px;
+}
+
+.auth-heading h2 {
+  font-size: 26px;
+  margin-bottom: 7px;
+  letter-spacing: -0.8px;
+}
+
+.auth-heading p {
+  color: #b0a4c9;
+  font-size: 13px;
+}
+
+.auth-field {
+  margin-bottom: 16px;
+}
+
+/* Two fields side by side (sign up: first name + username). */
+.auth-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.auth-field label {
+  display: block;
+  color: #e6dcf8;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* The box around an input: icon on the left, optional button on the right */
+.auth-input {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 13px;
+  background: rgba(0, 0, 0, 0.22);
+  color: #9d90b8;
+  transition: 0.2s ease;
+}
+
+.auth-input:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* :focus-within = "an element inside me has focus" */
+.auth-input:focus-within {
+  border-color: #a855f7;
+  background: rgba(0, 0, 0, 0.3);
+  color: #d8b4fe;
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.16);
+}
+
+.auth-input input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+}
+
+.auth-input input::placeholder {
+  color: #8d82a5;
+}
+
+/* Keep the dark look when the browser autofills a saved login. */
+.auth-input input:-webkit-autofill {
+  -webkit-text-fill-color: white;
+  caret-color: white;
+  transition: background-color 9999s ease-out;
+}
+
+.auth-password-toggle {
+  display: grid;
+  place-items: center;
+  padding: 6px;
+  margin-right: -6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #a99cc4;
+}
+
+.auth-password-toggle:hover {
+  color: white;
+}
+
+.auth-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 2px 0 20px;
+  font-size: 12px;
+}
+
+.auth-remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c9bfde;
+  cursor: pointer;
+}
+
+.auth-remember input {
+  accent-color: #a855f7;
+  width: 15px;
+  height: 15px;
+}
+
+.auth-submit {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 4px;
+  border: 0;
+  border-radius: 14px;
+  color: white;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  box-shadow:
+    0 10px 28px rgba(124, 58, 237, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  font-size: 15px;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.auth-submit:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow:
+    0 14px 34px rgba(124, 58, 237, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.auth-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+  filter: none;
+}
+
+.auth-message {
+  padding: 11px 13px;
+  margin-bottom: 14px;
+  border-radius: 11px;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.auth-message.error {
+  color: #fecdd3;
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(251, 113, 133, 0.35);
+}
+
+.auth-message.success {
+  color: #bbf7d0;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.auth-secure {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 16px;
+  color: #8d82a5;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.auth-secure .icon {
+  margin-top: 2px;
+}
+
+.auth-bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #b0a4c9;
+  font-size: 13px;
+}
+
+.auth-bottom button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #d8b4fe;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.auth-bottom button:hover {
+  text-decoration: underline;
+}
+
+/* Keyboard focus */
+
+.auth-page a:focus-visible,
+.auth-page button:focus-visible {
+  outline: 2px solid #d8b4fe;
+  outline-offset: 3px;
+}
+
+/* Short windows (laptops, or a browser zoomed in): everything gets a
+   little more compact so the whole page fits without scrolling.
+   max-height looks at the HEIGHT of the window, not its width. */
+
+@media (max-height: 820px) and (min-width: 761px) {
+  .auth-page {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .auth-layout {
+    padding: 12px 0 4px;
+  }
+
+  .auth-badge {
+    margin-bottom: 12px;
+  }
+
+  .auth-intro h1 {
+    /* vh = a percentage of the window height */
+    font-size: clamp(34px, 7.2vh, 56px);
+  }
+
+  .auth-lead {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .auth-features {
+    margin-top: 14px;
+  }
+
+  /* "zoom" shrinks the whole group and the space it takes up. */
+  .preview-stage {
+    zoom: 0.8;
+    margin-top: 24px;
+  }
+
+  .auth-card {
+    padding: 24px 30px;
+  }
+
+  .auth-tabs {
+    margin-bottom: 16px;
+  }
+
+  .auth-tabs button {
+    padding: 9px;
+  }
+
+  .auth-heading {
+    margin-bottom: 14px;
+  }
+
+  .auth-heading h2 {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+
+  .auth-field {
+    margin-bottom: 10px;
+  }
+
+  .auth-field label {
+    margin-bottom: 6px;
+  }
+
+  .auth-input {
+    height: 44px;
+  }
+
+  .auth-options {
+    margin-bottom: 12px;
+  }
+
+  .auth-submit {
+    min-height: 46px;
+  }
+
+  .auth-secure {
+    margin-top: 12px;
+  }
+
+  .auth-bottom {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+}
+
+/* Very short windows: drop the decorative picture. */
+@media (max-height: 640px) and (min-width: 761px) {
+  .preview-stage {
+    display: none;
+  }
+}
+
+/* Tablet */
+
+@media (max-width: 1050px) and (min-width: 761px) {
+  .auth-page {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .auth-layout {
+    gap: 30px;
+    grid-template-columns: minmax(0, 1fr) minmax(350px, 0.9fr);
+  }
+
+  .auth-intro h1 {
+    font-size: 44px;
+  }
+
+  .preview-stage {
+    zoom: 0.72;
+  }
+}
+
+/* Mobile: only the form card is shown */
+
+@media (max-width: 760px) {
+  .auth-page {
+    padding: 16px 16px 22px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .auth-topbar,
+  .auth-intro {
+    display: none;
+  }
+
+  .auth-layout {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  .auth-card {
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    border-radius: 22px;
+  }
+
+  .auth-mobile-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+    margin-bottom: 20px;
+  }
+
+  .auth-tabs {
+    margin-bottom: 20px;
+  }
+
+  .auth-heading {
+    margin-bottom: 18px;
+    text-align: center;
+  }
+
+  .auth-heading h2 {
+    font-size: 23px;
+  }
+
+  .auth-field {
+    margin-bottom: 13px;
+  }
+
+  .auth-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .auth-input {
+    height: 47px;
+  }
+
+  .auth-submit {
+    min-height: 49px;
+  }
+}
